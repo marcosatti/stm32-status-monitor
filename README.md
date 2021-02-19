@@ -23,7 +23,10 @@ Within the message parser thread, it assumes a packet is delivered into the DMA 
 For robustness, the data sent over UART1 is assumed to be as packets; packets follow the below format, and an idle line interrupt is used to determine when a new packet is incoming (ie: each break in transmission is considered a new packet).
 In a home setup, this is probably not needed, however it was a good learning exercise for me on how engineers might design against a noisy/unreliable line.
 
+The packet format is similar to [HDLC framing](https://en.wikipedia.org/wiki/High-Level_Data_Link_Control).
+
 Packet format:
+```
 |- 1 byte -|--------- 16 bit --------|- N bytes -|- 1 byte -|
 _____________________________________________________________
 |          |            |            |           |          |
@@ -31,6 +34,7 @@ _____________________________________________________________
 |   0x00   |  CHECKSUM  |  CHECKSUM  |   DATA    |   0x00   |
 |          |            |            |           |          |
 _____________________________________________________________
+```
 
 Do not exceed a packet length of 1024 (by default), otherwise the application will deadlock.
 
